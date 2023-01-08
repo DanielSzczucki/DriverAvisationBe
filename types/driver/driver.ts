@@ -8,6 +8,6 @@ export interface ListDriverRes {
 
 export type CreateDriverReq = Omit<DriverEntity, "id">;
 
-export interface SetLoadForChildReq {
+export interface SetLoadForDriverReq {
   loadId: string;
 }
