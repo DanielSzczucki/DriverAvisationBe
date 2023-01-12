@@ -16,7 +16,7 @@ driverRouter
     console.log(loadList);
 
     res.json({
-      driverRouter: "ready",
+      driverRouter: "ok",
       driverList,
       loadList,
     });
@@ -26,6 +26,31 @@ driverRouter
     const newDriver = new DriverRecord(req.body as CreateDriverReq);
 
     await newDriver.insert();
+    res.json(newDriver);
   })
 
-  .patch("/load/:driverId", async (req, res) => {});
+  .patch("/load/:driverId", async (req, res) => {
+    const { body }: { body: SetLoadForDriverReq } = req;
+
+    console.log(body);
+
+    const driver = await DriverRecord.getOne(req.params.driverId);
+
+    if (driver === null) {
+      throw new ValidationError(`Can't find driver with this id:${driver.id} `);
+    }
+
+    const load =
+      body.loadId === "" ? null : await LoadRecord.getOne(body.loadId);
+
+    if (load) {
+      if (load.quantity <= (await load.loadCount())) {
+        throw new ValidationError("There is not enough of this product");
+      }
+    }
+
+    // @TODO add loadId to driver.record.ts
+    //add verification driver load id = load it ?? null
+    // add driver update
+    //send json with driver
+  });

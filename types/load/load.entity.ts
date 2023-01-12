@@ -5,6 +5,7 @@ export enum Units {
   other,
 }
 export interface LoadEntity {
+  [x: string]: any;
   id?: string;
   referenceNumber: string;
   loadName: string;

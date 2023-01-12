@@ -81,7 +81,7 @@ export class LoadRecord implements LoadEntity {
     return results.length === 0 ? null : new LoadRecord(results[0]);
   }
 
-  async countAll(): Promise<number> {
+  async loadCount(): Promise<number> {
     const [[{ quantity }]] = (await pool.execute(
       "SELECT QUANTITY(*) AS `quantity` FROM `loads_list` WHERE `id` = :id",
       {

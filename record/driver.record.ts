@@ -6,6 +6,7 @@ import { FieldPacket } from "mysql2";
 
 type DriverRecordResults = [DriverEntity[], FieldPacket[]];
 
+//activeRecord
 export class DriverRecord implements DriverEntity {
   public id?: string;
   public referenceNumber: string;
@@ -37,7 +38,7 @@ export class DriverRecord implements DriverEntity {
     this.loadingUnloading = obj.loadingUnloading;
   }
 
-  async insert() {
+  async insert(): Promise<string> {
     if (!this.id) {
       this.id = uuid();
     }
@@ -54,9 +55,10 @@ export class DriverRecord implements DriverEntity {
         loadingUnloading: this.loadingUnloading,
       }
     );
+    return this.id;
   }
 
-  static async listAll() {
+  static async listAll(): Promise<DriverRecord[]> {
     const [results] = (await pool.execute(
       "SELECT * FROM `drivers_list` ORDER BY `name` ASC"
     )) as DriverRecordResults;
@@ -80,11 +82,11 @@ export class DriverRecord implements DriverEntity {
         id: this.id,
         referenceNumber: this.referenceNumber,
         name: this.name,
-        lastName: this.lastName,
-        phoneNumber: this.phoneNumber,
-        truckNumber: this.truckNumber,
-        trailerNumber: this.trailerNumber,
-        loadingUnloading: this.loadingUnloading,
+        // lastName: this.lastName,
+        // phoneNumber: this.phoneNumber,
+        // truckNumber: this.truckNumber,
+        // trailerNumber: this.trailerNumber,
+        // loadingUnloading: this.loadingUnloading,
       }
     );
   }
