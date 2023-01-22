@@ -1,6 +1,6 @@
-import * as express from "express";
+import express from "express";
 import "express-async-errors";
-import * as cors from "cors";
+import cors from "cors";
 import { homeRouter } from "./routers/homeRouter";
 import { driverRouter } from "./routers/driverRouter";
 import { loadRouter } from "./routers/loadRouter";
