@@ -1,6 +1,6 @@
 import { pool } from "../utils/db";
 import { ValidationError } from "../utils/errors";
-import { Action, DriverEntity } from "../types";
+import { DriverEntity } from "../types";
 import { v4 as uuid } from "uuid";
 import { FieldPacket } from "mysql2";
 
@@ -15,7 +15,7 @@ export class DriverRecord implements DriverEntity {
   public phoneNumber: number;
   public truckNumber: string;
   public trailerNumber: string;
-  public loadingUnloading: Action;
+  public loadingUnloading: string;
 
   constructor(obj: DriverEntity) {
     if (obj.referenceNumber.length < 12) {
@@ -89,5 +89,11 @@ export class DriverRecord implements DriverEntity {
         // loadingUnloading: this.loadingUnloading,
       }
     );
+  }
+
+  async delete(): Promise<void> {
+    await pool.execute("DELETE FROM `drivers_list` WHERE `id` = :id", {
+      id: this.id,
+    });
   }
 }

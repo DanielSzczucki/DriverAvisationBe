@@ -1,8 +1,3 @@
-export enum Action {
-  loading,
-  unloading,
-}
-
 export interface DriverEntity {
   id?: string;
   referenceNumber: string;
@@ -11,5 +6,5 @@ export interface DriverEntity {
   phoneNumber: number;
   truckNumber: string;
   trailerNumber: string;
-  loadingUnloading: Action;
+  loadingUnloading: string;
 }
