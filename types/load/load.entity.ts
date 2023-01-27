@@ -5,7 +5,6 @@ export enum Units {
   other,
 }
 export interface LoadEntity {
-  [x: string]: any;
   id?: string;
   referenceNumber: string;
   loadName: string;
@@ -14,4 +13,5 @@ export interface LoadEntity {
   units: Units;
   quantity: number;
   weight: number;
+  driverId: string;
 }

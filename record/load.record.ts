@@ -15,6 +15,7 @@ export class LoadRecord implements LoadEntity {
   public units: Units;
   public quantity: number;
   public weight: number;
+  public driverId: string;
 
   constructor(obj: LoadEntity) {
     if (obj.referenceNumber.length !== 12) {
@@ -64,14 +65,14 @@ export class LoadRecord implements LoadEntity {
     return this.id;
   }
 
-  static async listAll(): Promise<LoadEntity[] | null> {
+  static async listAll(): Promise<LoadRecord[] | null> {
     const [results] = (await pool.execute(
       "SELECT * FROM `loads_list`"
     )) as LoadRecordResults;
     return results.map((obj) => new LoadRecord(obj));
   }
 
-  static async getOne(id: string): Promise<LoadEntity | null> {
+  static async getOne(id: string): Promise<LoadRecord | null> {
     const [results] = (await pool.execute(
       "SELECT * FROM `loads_list` WHERE `id` = :id",
       {
@@ -97,3 +98,5 @@ export class LoadRecord implements LoadEntity {
     });
   }
 }
+
+//TODO wyczuysc wywyłanie wszystkiego na front, wyślij to co potrzebne

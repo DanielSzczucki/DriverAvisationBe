@@ -7,4 +7,5 @@ export interface DriverEntity {
   truckNumber: string;
   trailerNumber: string;
   loadingUnloading: string;
+  loadId: string;
 }
