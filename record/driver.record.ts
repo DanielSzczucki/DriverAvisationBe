@@ -97,3 +97,5 @@ export class DriverRecord implements DriverEntity {
     });
   }
 }
+
+//@TODO dodaj: - datę rekordu, oraz przypisanie rekordu do kierowcy//

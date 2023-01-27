@@ -29,7 +29,7 @@ export class LoadRecord implements LoadEntity {
 
     if (Number(!obj.quantity) || Number(!obj.weight)) {
       throw new ValidationError(
-        "Load have to has its properties: quantiti and weight > 1"
+        "Load have to has its properties: quantity and weight > 1"
       );
     }
 
@@ -81,7 +81,7 @@ export class LoadRecord implements LoadEntity {
     return results.length === 0 ? null : new LoadRecord(results[0]);
   }
 
-  async loadCount(): Promise<number> {
+  async countGivenLoads(): Promise<number> {
     const [[{ quantity }]] = (await pool.execute(
       "SELECT QUANTITY(*) AS `quantity` FROM `loads_list` WHERE `id` = :id",
       {

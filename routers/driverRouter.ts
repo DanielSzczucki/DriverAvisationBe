@@ -49,8 +49,13 @@ driverRouter
       }
     }
 
+    driver.referenceNumber = load.referenceNumber ?? null;
+    await driver.update();
+    res.json(driver);
+
     // @TODO add loadId to driver.record.ts
     //add verification driver load id = load it ?? null
     // add driver update
     //send json with driver
+    /////////////////usuń dane z tabeli i dodaj klucze
   });
