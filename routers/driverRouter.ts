@@ -44,7 +44,7 @@ driverRouter
       body.loadId === "" ? null : await LoadRecord.getOne(body.loadId);
 
     if (load) {
-      if (load.quantity <= (await load.loadCount())) {
+      if (load.quantity <= (await load.countGivenLoads())) {
         throw new ValidationError("There is not enough of this product");
       }
     }
