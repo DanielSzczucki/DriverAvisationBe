@@ -2,6 +2,7 @@ import { Router } from "express";
 import { LoadRecord } from "../record/load.record";
 import { DriverRecord } from "../record/driver.record";
 import { GetSingleLoadRes } from "../types";
+import { ValidationError } from "../utils/errors";
 
 export const loadRouter = Router();
 
@@ -28,4 +29,19 @@ loadRouter
       load,
       givenCount,
     } as GetSingleLoadRes);
+  })
+
+  .delete("/:id", async (req, res) => {
+    const load = await LoadRecord.getOne(req.params.id);
+
+    if (!load) {
+      throw new ValidationError("No such load");
+    }
+
+    if ((await load.countGivenLoads()) > 0) {
+      throw new ValidationError("Cnnot remove given load");
+    }
+
+    await load.delete();
+    res.end();
   });
