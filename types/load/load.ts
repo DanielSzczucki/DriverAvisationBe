@@ -4,5 +4,5 @@ export type CreateLoadReq = Omit<LoadEntity, "id">;
 
 export interface GetSingleLoadRes {
   load: LoadEntity;
-  loadCount: number;
+  givenCount: number;
 }

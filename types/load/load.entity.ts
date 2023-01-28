@@ -14,4 +14,5 @@ export interface LoadEntity {
   quantity: number;
   weight: number;
   driverId: string;
+  count: number;
 }

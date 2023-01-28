@@ -16,6 +16,7 @@ export class LoadRecord implements LoadEntity {
   public quantity: number;
   public weight: number;
   public driverId: string;
+  public count: number;
 
   constructor(obj: LoadEntity) {
     if (obj.referenceNumber.length !== 12) {
@@ -43,6 +44,7 @@ export class LoadRecord implements LoadEntity {
     this.quantity = obj.quantity;
     this.weight = obj.weight;
     this.driverId = obj.driverId;
+    this.count = obj.count;
     //ref 12 znaków
     //name min 3 znaki
     //units musi byc
@@ -55,11 +57,12 @@ export class LoadRecord implements LoadEntity {
     }
 
     await pool.execute(
-      "INSERT INTO `loads_list` Values(:id, :referenceNumber, :loadName)",
+      "INSERT INTO `loads_list` Values(:id, :referenceNumber, :loadName, :count)",
       {
         id: this.id,
         referenceNumber: this.referenceNumber,
         loadName: this.loadName,
+        count: this.count,
       }
     );
     return this.id;
@@ -83,13 +86,13 @@ export class LoadRecord implements LoadEntity {
   }
 
   async countGivenLoads(): Promise<number> {
-    const [[{ quantity }]] = (await pool.execute(
-      "SELECT QUANTITY(*) AS `quantity` FROM `loads_list` WHERE `id` = :id",
+    const [[{ count }]] = (await pool.execute(
+      "SELECT COUNT(*) AS `count` FROM `drivers_list` WHERE `loadId` = :id",
       {
         id: this.id,
       }
     )) as LoadRecordResults;
-    return quantity;
+    return count;
   }
 
   async delete(): Promise<void> {

@@ -19,10 +19,13 @@ loadRouter
 
   .get("/:loadId", async (req, res) => {
     const load = await LoadRecord.getOne(req.params.loadId);
-    const loadCount = await load.countGivenLoads();
+    const givenCount = await load.countGivenLoads();
+
+    console.log(givenCount);
+    console.log(load);
 
     res.json({
       load,
-      loadCount,
+      givenCount,
     } as GetSingleLoadRes);
   });
