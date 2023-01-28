@@ -37,6 +37,7 @@ export class DriverRecord implements DriverEntity {
     this.truckNumber = obj.truckNumber;
     this.trailerNumber = obj.trailerNumber;
     this.loadingUnloading = obj.loadingUnloading;
+    this.loadId = obj.loadId;
   }
 
   async insert(): Promise<string> {

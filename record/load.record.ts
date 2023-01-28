@@ -42,7 +42,7 @@ export class LoadRecord implements LoadEntity {
     this.units = obj.units;
     this.quantity = obj.quantity;
     this.weight = obj.weight;
-
+    this.driverId = obj.driverId;
     //ref 12 znaków
     //name min 3 znaki
     //units musi byc
