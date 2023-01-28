@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { LoadRecord } from "../record/load.record";
 import { DriverRecord } from "../record/driver.record";
-import { GetSingleLoadRes } from "../types";
+import { CreateLoadReq, GetSingleLoadRes } from "../types";
 import { ValidationError } from "../utils/errors";
 
 export const loadRouter = Router();
@@ -39,9 +39,16 @@ loadRouter
     }
 
     if ((await load.countGivenLoads()) > 0) {
-      throw new ValidationError("Cnnot remove given load");
+      throw new ValidationError("Canot remove given load");
     }
 
     await load.delete();
     res.end();
+  })
+
+  .post("/", async (req, res) => {
+    const newLoad = new LoadRecord(req.body as CreateLoadReq);
+    await newLoad.insert();
+
+    res.json(newLoad);
   });
