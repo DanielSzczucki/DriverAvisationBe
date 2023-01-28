@@ -16,6 +16,7 @@ export class DriverRecord implements DriverEntity {
   public truckNumber: string;
   public trailerNumber: string;
   public loadingUnloading: string;
+  public loadId: string;
 
   constructor(obj: DriverEntity) {
     if (obj.referenceNumber.length < 12) {
