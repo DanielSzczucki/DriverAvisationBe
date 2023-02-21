@@ -11,3 +11,7 @@ export type CreateDriverReq = Omit<DriverEntity, "id">;
 export interface SetLoadForDriverReq {
   loadId: string;
 }
+
+export interface GetSingleDriverRes {
+  driver: DriverEntity;
+}

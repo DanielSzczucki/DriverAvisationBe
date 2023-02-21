@@ -22,6 +22,16 @@ driverRouter
     });
   })
 
+  .get("/:id", async (req, res) => {
+    const driver = await DriverRecord.getOne(req.params.id);
+    // const load = await LoadRecord.getOne(req.params.loadId);
+
+    res.json({
+      singleDriver: "ok",
+      driver,
+    });
+  })
+
   .post("/", async (req, res) => {
     const newDriver = new DriverRecord(req.body as CreateDriverReq);
 

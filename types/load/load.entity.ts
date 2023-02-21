@@ -9,6 +9,7 @@ export interface LoadEntity {
   referenceNumber: string;
   loadName: string;
   sender: string;
+  forwarder: string;
   recipient: string;
   units: Units;
   quantity: number;

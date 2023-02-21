@@ -11,6 +11,7 @@ export class LoadRecord implements LoadEntity {
   public referenceNumber: string;
   public loadName: string;
   public sender: string;
+  public forwarder: string;
   public recipient: string;
   public units: Units;
   public quantity: number;
@@ -39,6 +40,7 @@ export class LoadRecord implements LoadEntity {
     this.referenceNumber = obj.referenceNumber;
     this.loadName = obj.loadName;
     this.sender = obj.sender;
+    this.forwarder = obj.forwarder;
     this.recipient = obj.recipient;
     this.units = obj.units;
     this.quantity = obj.quantity;
