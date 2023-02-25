@@ -94,6 +94,7 @@ export class LoadRecord implements LoadEntity {
         id: this.id,
       }
     )) as LoadRecordResults;
+
     return count;
   }
 
