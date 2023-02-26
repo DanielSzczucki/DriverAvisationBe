@@ -1,9 +1,10 @@
 export interface DriverEntity {
   id?: string;
-  referenceNumber: string;
   name: string;
   lastName: string;
   phoneNumber: number;
+  referenceNumber: string;
+  companyName: string;
   truckNumber: string;
   trailerNumber: string;
   loadingUnloading: string;

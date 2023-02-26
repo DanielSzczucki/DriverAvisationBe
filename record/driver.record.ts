@@ -15,6 +15,7 @@ export class DriverRecord implements DriverEntity {
   public phoneNumber: number;
   public truckNumber: string;
   public trailerNumber: string;
+  public companyName: string;
   public loadingUnloading: string;
   public loadId: string;
 
@@ -36,6 +37,7 @@ export class DriverRecord implements DriverEntity {
     this.phoneNumber = obj.phoneNumber;
     this.truckNumber = obj.truckNumber;
     this.trailerNumber = obj.trailerNumber;
+    this.companyName = obj.companyName;
     this.loadingUnloading = obj.loadingUnloading;
     this.loadId = obj.loadId;
   }
@@ -46,16 +48,7 @@ export class DriverRecord implements DriverEntity {
     }
     await pool.execute(
       "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `loadingUnloading`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :loadingUnloading)",
-      {
-        id: this.id,
-        referenceNumber: this.referenceNumber,
-        name: this.name,
-        lastName: this.lastName,
-        phoneNumber: this.phoneNumber,
-        truckNumber: this.truckNumber,
-        trailerNumber: this.trailerNumber,
-        loadingUnloading: this.loadingUnloading,
-      }
+      this
     );
     return this.id;
   }
