@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { DriverRecord } from "../record/driver.record";
 import { LoadRecord } from "../record/load.record";
+
 import { ValidationError } from "../utils/errors";
 import { CreateDriverReq, ListDriverRes, SetLoadForDriverReq } from "../types";
 import { DriverEntity } from "../types";
@@ -13,7 +14,7 @@ driverRouter
     const driverList = await DriverRecord.listAll();
     const loadList = await LoadRecord.listAll();
 
-    console.log(loadList);
+    // console.log(loadList);
 
     res.json({
       driverRouter: "ok",
