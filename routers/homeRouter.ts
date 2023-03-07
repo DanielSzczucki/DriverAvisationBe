@@ -36,12 +36,12 @@ homeRouter
         },
         config.JWT_SECRET,
         {
-          expiresIn: "1d",
+          expiresIn: "5m",
         }
       );
 
       res.cookie("jwt", refreshToken, {
-        // httpOnly: true,
+        httpOnly: true,
         sameSite: "none",
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
@@ -57,7 +57,9 @@ homeRouter
   .post("/refresh", (req, res) => {
     if (req.cookies?.jwt) {
       const refreshToken = req.cookies.jwt;
-      console.log(refreshToken);
+      console.log(req.cookies.jwt);
+
+      // console.log(refreshToken);
 
       jwt.verify(
         refreshToken,

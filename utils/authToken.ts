@@ -16,7 +16,8 @@ export const authToken = (
 ) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader.split(" ")[1];
-  console.log(req.headers);
+  console.log(req.cookies);
+
   console.log(token);
 
   if (token == null) return res.sendStatus(401);
