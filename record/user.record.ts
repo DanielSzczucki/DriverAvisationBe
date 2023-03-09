@@ -7,6 +7,7 @@ type UserRecordResults = [UserRecord[], FieldPacket[]];
 
 //activeRecord
 export class UserRecord {
+  public id?: string;
   public name: string;
   public email: string;
   public password: string;
@@ -16,14 +17,18 @@ export class UserRecord {
       throw new ValidationError("Load name have to has min 3 to 50 signs");
     }
 
+    this.id = obj.id;
     this.name = obj.name;
     this.email = obj.email;
     this.password = obj.password;
   }
 
   async insert(): Promise<string> {
+    if (!this.id) {
+      this.id = uuid();
+    }
     await pool.execute(
-      "INSERT INTO `users_list`(`name`, `email`, `password`) VALUES (:name, :email, :password)",
+      "INSERT INTO `users_list`(`id`, `name`, `email`, `password`) VALUES (:id, :name, :email, :password)",
       this
     );
     return this.name;
@@ -31,16 +36,26 @@ export class UserRecord {
 
   static async listAll(): Promise<UserRecord[]> {
     const [results] = (await pool.execute(
-      "SELECT * FROM `user_record` ORDER BY `name` ASC"
+      "SELECT * FROM `users_record` ORDER BY `name` ASC"
     )) as UserRecordResults;
     return results.map((obj) => new UserRecord(obj));
   }
 
   static async getOne(email: string) {
     const [results] = (await pool.execute(
-      "SELECT * FROM `user_list` WHERE `email` = :email",
+      "SELECT * FROM `users_list` WHERE `email` = :email",
       {
         email,
+      }
+    )) as UserRecordResults;
+    return results.length === 0 ? null : new UserRecord(results[0]);
+  }
+
+  static async getOneById(id: string) {
+    const [results] = (await pool.execute(
+      "SELECT * FROM `users_list` WHERE `id` = :id",
+      {
+        id,
       }
     )) as UserRecordResults;
     return results.length === 0 ? null : new UserRecord(results[0]);

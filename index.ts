@@ -11,20 +11,12 @@ import { authToken } from "./utils/authToken";
 import { config } from "./utils/config";
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
-//check it
-// app.use(
-//   cookiesession({
-//     name: "_auth",
-//     keys: [config.JWT_SECRET, config.keys],
-//     httpOnly: true,
-//   })
-// );
 
 app.use("/", homeRouter);
-app.use("/driver", authToken, driverRouter);
+app.use("/driver", driverRouter);
 app.use("/load", authToken, loadRouter);
 app.use("/mag", authToken, magRouter);
 
