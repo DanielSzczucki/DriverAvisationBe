@@ -10,3 +10,10 @@ export interface DataStoredInToken {
 }
 
 export type CreateUserReq = Omit<UserRecord, "id">;
+
+export interface UserLoginReq {
+  id: string;
+  name: string;
+  password: string;
+  message: string;
+}

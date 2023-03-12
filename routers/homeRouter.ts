@@ -63,6 +63,7 @@ homeRouter
     const createToken = (user: UserRecord, expirationInMinutes: number) => {
       const expiresIn = expirationInMinutes * 60 * 1000;
       const secret = config.JWT_SECRET;
+      const refreshSecret = config.REFRESH_SECRET;
       const dataStoredInToken: DataStoredInToken = {
         id: user.id,
       };
@@ -70,6 +71,7 @@ homeRouter
       return {
         expiresIn,
         token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
+        refreshToken: jwt.sign(dataStoredInToken, refreshSecret, { expiresIn }),
       };
     };
 
@@ -91,6 +93,7 @@ homeRouter
             ...user,
             password: undefined,
             message: "succes",
+            token,
           });
       } else {
         res.status(406).json({ message: "Invalid Credential" });
@@ -100,6 +103,15 @@ homeRouter
       res.status(406).json({ message: "Invalid Credential" });
       throw new ValidationError("Something is wrong here");
     }
+  })
+
+  .post("/logout", (req, res) => {
+    res
+      .setHeader("Set-Cookie", ["Authorization=, Max-age=0"])
+      .status(200)
+      .json({
+        message: "logged out",
+      });
   })
 
   .post("/refresh", (req, res) => {
