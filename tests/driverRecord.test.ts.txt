@@ -14,7 +14,9 @@ test("Uninserted LoadRecord should have no id", async () => {
     phoneNumber: 48798787765,
     truckNumber: "NO4608Y",
     trailerNumber: "WGM56987",
+    companyName: "ASAP",
     loadingUnloading: "unloading",
+    loadId: "3456789876gshdnu857k45jhw4",
   });
 
   expect(driver.id).toBeUndefined();
@@ -22,13 +24,14 @@ test("Uninserted LoadRecord should have no id", async () => {
 
 test("Inserted DriverRecord shoud have id and this id id uuid", async () => {
   const driver = new DriverRecord({
-    referenceNumber: "RUS-1212-234",
     name: "Dan",
     lastName: "Tona",
     phoneNumber: 48798787765,
     truckNumber: "NO4608Y",
     trailerNumber: "WGM56987",
+    companyName: "ASAP",
     loadingUnloading: "unloading",
+    loadId: "3456789876gshdnu857k467895jhw4",
   });
 
   await driver.insert();
@@ -43,13 +46,16 @@ test("Inserted DriverRecord shoud have id and this id id uuid", async () => {
 
 test("Throw?", async () => {
   const driver = new DriverRecord({
+    id: "dfghju7654ewedfghnjuyh",
     referenceNumber: "RUS-1212-234",
-    name: "D",
+    name: "Dan",
     lastName: "Tona",
     phoneNumber: 48798787765,
     truckNumber: "NO4608Y",
     trailerNumber: "WGM56987",
+    companyName: "ASAP",
     loadingUnloading: "unloading",
+    loadId: "3456789876gshdnu857k45jhw4",
   });
 
   await driver.insert();
