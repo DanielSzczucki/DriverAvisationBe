@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "ts-node index.ts",
     "start": "tsnd index.ts",
+    "build": "tsc",
     "test": "jest"
   },
   "author": "Dan",
@@ -22,6 +23,7 @@
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^2.3.3",
+    "tsc": "^2.0.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
