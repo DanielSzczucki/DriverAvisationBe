@@ -1,19 +1,21 @@
 import { Router } from "express";
 import { DriverRecord } from "../record/driver.record";
 import { LoadRecord } from "../record/load.record";
+
 import { ValidationError } from "../utils/errors";
 import { CreateDriverReq, ListDriverRes, SetLoadForDriverReq } from "../types";
 import { DriverEntity } from "../types";
+import { authToken } from "../utils/authToken";
 
 export const driverRouter = Router();
 
 driverRouter
 
-  .get("/", async (req, res) => {
+  .get("/", authToken, async (req, res) => {
     const driverList = await DriverRecord.listAll();
     const loadList = await LoadRecord.listAll();
 
-    console.log(loadList);
+    // console.log(loadList);
 
     res.json({
       driverRouter: "ok",
@@ -22,7 +24,7 @@ driverRouter
     });
   })
 
-  .get("/:id", async (req, res) => {
+  .get("/:id", authToken, async (req, res) => {
     const driver = await DriverRecord.getOne(req.params.id);
     // const load = await LoadRecord.getOne(req.params.loadId);
 

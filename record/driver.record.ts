@@ -72,17 +72,17 @@ export class DriverRecord implements DriverEntity {
 
   async update(): Promise<void> {
     await pool.execute(
-      "UPDATE `drivers_list` SET `name` = :name, `referenceNumber` = :referenceNumber WHERE `id` = :id",
-      {
-        id: this.id,
-        referenceNumber: this.referenceNumber,
-        name: this.name,
-        // lastName: this.lastName,
-        // phoneNumber: this.phoneNumber,
-        // truckNumber: this.truckNumber,
-        // trailerNumber: this.trailerNumber,
-        // loadingUnloading: this.loadingUnloading,
-      }
+      "UPDATE `drivers_list` SET (`referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `loadingUnloading`) VALUES (:referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :loadingUnloading)",
+      this
+      // {
+      //   referenceNumber: this.referenceNumber,
+      //   name: this.name,
+      //   lastName: this.lastName,
+      //   phoneNumber: this.phoneNumber,
+      //   truckNumber: this.truckNumber,
+      //   trailerNumber: this.trailerNumber,
+      //   loadingUnloading: this.loadingUnloading,
+      // }
     );
   }
 
