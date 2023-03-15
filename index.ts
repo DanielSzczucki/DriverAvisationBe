@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import "express-async-errors";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -15,10 +15,14 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/", homeRouter);
-app.use("/driver", driverRouter);
-app.use("/load", authToken, loadRouter);
-app.use("/mag", authToken, magRouter);
+const router = Router();
+
+router.use("/", homeRouter);
+router.use("/driver", driverRouter);
+router.use("/load", authToken, loadRouter);
+router.use("/mag", authToken, magRouter);
+
+app.use("/api", router);
 
 app.listen(3001, "0.0.0.0", () => {
   console.log(`Listening on http://localhost:3001`);
