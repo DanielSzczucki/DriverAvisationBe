@@ -6,7 +6,7 @@
       "type": "typescript",
       "tsconfig": "tsconfig.json",
       "option": "watch",
-      "auto": false,
+      "auto": "true",
       "problemMatcher": ["$tsc-watch"]
     }
   ]
