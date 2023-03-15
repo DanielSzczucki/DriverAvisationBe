@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "ts-node index.ts",
     "start": "tsnd index.ts",
+    "build": "typescript",
     "test": "jest"
   },
   "keywords": [],
