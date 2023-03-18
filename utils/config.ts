@@ -11,8 +11,8 @@ export const config = {
   // dbDatabase: "driver_avisation",
   // dbPassword: "",
   // corsOrigin: "http://localhost:3000",
-  dbUser: "user",
+  dbUser: "simplema_cargo",
   dbDatabase: "simplema_cargo",
-  dbPassword: "x7tMuNTnW2",
+  dbPassword: "YyJWwTbbr",
   corsOrigin: "https://simplecargo.networkmanager.pl",
 };
