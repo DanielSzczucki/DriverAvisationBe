@@ -7,8 +7,12 @@ export const config = {
   REFRESH_SECRET: "token",
   keys: "other",
   dbHost: "localhost",
+  // dbUser: "root",
+  // dbDatabase: "driver_avisation",
+  // dbPassword: "",
+  // corsOrigin: "http://localhost:3000",
   dbUser: "user",
   dbDatabase: "simplema_cargo",
   dbPassword: "x7tMuNTnW2",
-  corsOrigin: "http://localhost:3000",
+  corsOrigin: "https://simplecargo.networkmanager.pl",
 };

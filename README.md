@@ -37,9 +37,12 @@ Uruchomienie
 Uruchom serwer: npm start
 Aplikacja będzie dostępna pod adresem http://localhost:3001
 
-Tu jest FrontEnd: https://github.com/DanielSzczucki/DriverAvisationFe
-Pzreczytaj readme!
+uruchomienie bazy danych lokalnie:
+w php my admin wyłącz sprawdzanie kluczy obcych
+kod z pliku createdb wklejasz do heidi lub phpMyAdmin.
 
+Tu jest FrontEnd: https://github.com/DanielSzczucki/DriverAvisationFe
+Przeczytaj readme!
 
 Opis backend:
 Opis frontend znajdziesz w readme tu: https://github.com/DanielSzczucki/DriverAvisationFe
@@ -53,6 +56,7 @@ Rejestrując użytkownika, w bazie danych nie zapisujemy jego hasła, a hash stw
 Podczas logowania, funkcja skrótu weryfikuje hasło logowania.
 Możesz dodać swojego użytkownika admina.
 Wszytsko odbywa się na ścieżce homeRouter:
+
 - zarządzanie nowymi użytkownikami adminami,
 - tworzenie jwt,
 - odświerzanie jwt,
@@ -65,23 +69,13 @@ Teraz refreshToken i Token - to jeden, ten sam token.
 A token - to token używany do weryfikacji na backendzie.
 Aplikacja posiada middleware do sparwdzania tokena, zabezpieczone są prawie wszystkie ścieżki, oprócz dodawania kierowcy.
 
-Folder record: znajdziesz tam klasy, prosty crud napisany od podstaw według wzorca Active Record (nie zawiera on wszytskich metod, np do ustalania relacji pomiędzy tabelami), służące do zarządzania rekordami w poszczególnych tabelach. 
+Folder record: znajdziesz tam klasy, prosty crud napisany od podstaw według wzorca Active Record (nie zawiera on wszytskich metod, np do ustalania relacji pomiędzy tabelami), służące do zarządzania rekordami w poszczególnych tabelach.
 
 Folder Utills - zawiera narzędzia oraz pliki konfiguracyjne.
 
 Routery zawierają w sobie częśc logiki do zarządzania kierowcami, towarami i userami.
 DriverRouter - zwraca listy kierowców
 LoadRouter - zwraca listy ładunków
-
-
-
-
-
-
-
-
-
-
 
 Opis z punktu widzenia użytownika.
 Po wejściu na strone palikacji zobaczysz formularz do rejestracji kierowcy.
@@ -91,10 +85,8 @@ Dane kierowcy zapisywane są w tabelibazy danych: drivers_list
 W górnej części aplikacji, w nagłowku, po lewej stronie znajdziesz ikone kluczyk, ikona pozwoli Ci się zalogować.
 Nad formularzem rejestracji użytkowników jeszczę pracuję
 
-
 Dokumentacja
 [Link do dokumentacji]
-
 
 Licencja
 [Typ licencji i ewentualne ograniczenia]

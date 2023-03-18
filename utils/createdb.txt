@@ -1,0 +1,74 @@
+-- --------------------------------------------------------
+-- Host:                         localhost
+-- Wersja serwera:               10.4.24-MariaDB - mariadb.org binary distribution
+-- Serwer OS:                    Win64
+-- HeidiSQL Wersja:              12.4.0.6659
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- Zrzut struktury tabela driver_avisation.drivers_list
+CREATE TABLE IF NOT EXISTS `drivers_list` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
+  `referenceNumber` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `companyName` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastName` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phoneNumber` bigint(13) unsigned zerofill NOT NULL,
+  `truckNumber` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `trailerNumber` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `loadingUnloading` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `loadId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `startDate` datetime NOT NULL DEFAULT curdate(),
+  `endDate` datetime DEFAULT curdate(),
+  PRIMARY KEY (`id`),
+  KEY `loadId` (`loadId`),
+  CONSTRAINT `FK_drivers_list_loads_list` FOREIGN KEY (`loadId`) REFERENCES `loads_list` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela driver_avisation.loads_list
+CREATE TABLE IF NOT EXISTS `loads_list` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
+  `referenceNumber` varchar(12) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `loadName` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sender` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `recipient` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `forwarder` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `units` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `weight` int(7) NOT NULL,
+  `driverId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `startDate` datetime NOT NULL DEFAULT curdate(),
+  `endDate` datetime DEFAULT curdate(),
+  PRIMARY KEY (`id`),
+  KEY `driverId` (`driverId`),
+  CONSTRAINT `FK_loads_list_drivers_list` FOREIGN KEY (`driverId`) REFERENCES `drivers_list` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Eksport danych został odznaczony.
+
+-- Zrzut struktury tabela driver_avisation.users_list
+CREATE TABLE IF NOT EXISTS `users_list` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `startDate` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Eksport danych został odznaczony.
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

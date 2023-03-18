@@ -11,6 +11,7 @@ export class UserRecord {
   public name: string;
   public email: string;
   public password: string;
+  public startDate?: Date;
 
   constructor(obj: UserRecord) {
     if (!obj.name || obj.name.length < 2 || obj.name.length > 50) {
@@ -21,14 +22,20 @@ export class UserRecord {
     this.name = obj.name;
     this.email = obj.email;
     this.password = obj.password;
+    this.startDate = obj.startDate;
   }
 
   async insert(): Promise<string> {
     if (!this.id) {
       this.id = uuid();
     }
+
+    if (!this.startDate) {
+      this.startDate = new Date();
+    }
+
     await pool.execute(
-      "INSERT INTO `users_list`(`id`, `name`, `email`, `password`) VALUES (:id, :name, :email, :password)",
+      "INSERT INTO `users_list`(`id`, `name`, `email`, `password`, startDate) VALUES (:id, :name, :email, :password, startDate)",
       this
     );
     return this.name;
