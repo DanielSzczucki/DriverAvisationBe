@@ -11,7 +11,7 @@ import { authToken } from "./utils/authToken";
 import { config } from "./utils/config";
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: config.corsOrigin, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
