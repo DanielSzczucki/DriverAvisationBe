@@ -11,7 +11,6 @@ import {
   DataStoredInToken,
   TokenData,
 } from "../types/user/user";
-import { User } from "../types/user";
 
 export const homeRouter = Router();
 
@@ -24,12 +23,8 @@ homeRouter
 
   .post("/register", async (req, res) => {
     const userData = req.body as CreateUserReq;
-    console.log("req.body:", req.body);
-
-    // const userData = per;
 
     const user = await UserRecord.getOne(userData.email);
-    console.log("user", user);
 
     //if exist
     if (user) {
@@ -55,10 +50,8 @@ homeRouter
 
   .post("/login", async (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password);
 
     const user = await UserRecord.getOne(email);
-    console.log("user login route", user);
 
     const createToken = (user: UserRecord, expirationInMinutes: number) => {
       const expiresIn = expirationInMinutes * 60 * 1000;
@@ -115,11 +108,11 @@ homeRouter
   })
 
   .post("/refresh", (req, res) => {
-    if (req.cookies?.jwt) {
-      const refreshToken = req.cookies.jwt;
-      console.log(req.cookies.jwt);
-
-      // console.log(refreshToken);
+    //strictly cooperated with frontend authentication on reacy-auth-kit
+    if (req.cookies && req.cookies.Authorization) {
+      //refresh token works with react-auth-kit not with backend auth. Its works but not exacly like it neededd on backend side. its ok for now and for frontend auth
+      //Token must be taken from the cookie and not the body
+      const refreshToken = req.body.refreshToken;
 
       jwt.verify(
         refreshToken,

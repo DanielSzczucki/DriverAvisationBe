@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from "express";
 import { UserRecord } from "../record/user.record";
 import { ValidationError } from "./errors";
 
-interface MyRequest extends Request {
+interface UserData extends Request {
   user?: { id: string; name: string };
 }
 
@@ -13,7 +13,7 @@ interface MyRequest extends Request {
 //jwt werification middleware
 
 export const authToken = async (
-  req: MyRequest,
+  req: UserData,
   res: Response,
   next: NextFunction
 ) => {
