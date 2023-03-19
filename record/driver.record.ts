@@ -47,7 +47,7 @@ export class DriverRecord implements DriverEntity {
       this.id = uuid();
     }
     await pool.execute(
-      "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `loadingUnloading`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :loadingUnloading)",
+      "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading)",
       this
     );
     return this.id;

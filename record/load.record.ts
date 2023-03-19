@@ -16,8 +16,10 @@ export class LoadRecord implements LoadEntity {
   public units: Units;
   public quantity: number;
   public weight: number;
-  public driverId: string;
+  public driverId?: string;
   public count: number;
+  public startDate?: string;
+  public endDate?: string;
 
   constructor(obj: LoadEntity) {
     if (obj.referenceNumber.length !== 12) {
@@ -47,26 +49,42 @@ export class LoadRecord implements LoadEntity {
     this.weight = obj.weight;
     this.driverId = obj.driverId;
     this.count = obj.count;
-    //ref 12 znaków
-    //name min 3 znaki
-    //units musi byc
-    // quantity min 1
+    this.startDate = obj.startDate;
+    this.endDate = obj.endDate;
   }
 
   async insert(): Promise<string> {
+    console.log();
+
     if (!this.id) {
       this.id = uuid();
     }
+    if (!this.startDate) {
+      this.startDate = new Date().toLocaleDateString();
+    }
+    if (!this.startDate) {
+      this.endDate = new Date().toLocaleDateString();
+    }
+
+    switch (true) {
+      case !this.id:
+        this.id = uuid();
+        break;
+      case !this.startDate:
+        this.startDate = new Date().toDateString();
+        break;
+      case !this.endDate:
+        this.endDate = "NOT SIGN";
+      case !this.driverId:
+        this.driverId = "NOT SIGN";
+        break;
+    }
 
     await pool.execute(
-      "INSERT INTO `loads_list` Values(:id, :referenceNumber, :loadName, :count)",
-      {
-        id: this.id,
-        referenceNumber: this.referenceNumber,
-        loadName: this.loadName,
-        count: this.count,
-      }
+      "INSERT INTO `loads_list`(`id`, `referenceNumber`, `loadName`, `sender`, `forwarder`, `recipient`, `units`, `quantity`, `weight`, `startDate`, `endDate`) VALUES (:id, :referenceNumber, :loadName, :sender, :forwarder, :recipient, :units, :quantity, :weight, :startDate, :endDate)",
+      this
     );
+
     return this.id;
   }
 

@@ -14,6 +14,8 @@ export interface LoadEntity {
   units: Units;
   quantity: number;
   weight: number;
-  driverId: string;
+  driverId?: string;
   count: number;
+  startDate?: string;
+  endDate?: string;
 }
