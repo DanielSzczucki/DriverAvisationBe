@@ -104,7 +104,7 @@ export class LoadRecord implements LoadEntity {
     )) as LoadRecordResults;
     return results.length === 0 ? null : new LoadRecord(results[0]);
   }
-
+  //check! fix!
   async countGivenLoads(): Promise<number> {
     const [[{ count }]] = (await pool.execute(
       "SELECT COUNT(*) AS `count` FROM `drivers_list` WHERE `loadId` = :id",
