@@ -46,10 +46,6 @@
 // export { assignDriversToLoads };
 // W tym kodzie używamy metody execute z pulą połączeń, aby wykonać zapytanie. Następnie iterujemy po wyniku i dla każdego znalezionego wiersza pobieramy ładunek i przypisujemy mu id kierowcy. Na koniec wywołujemy metodę update ładunku, aby zaktualizować go w bazie danych z nowym id kierowcy.
 
-// dszczucki@gmail.com
-// czy możesz mi to lepiej wyjaśnić?
-// Oczywiście, chętnie pomogę!
-
 // W Twoim kodzie jest już zdefiniowana klasa DriverRecord i klasa LoadRecord, które odzwierciedlają encje w Twojej bazie danych. Każda z klas ma swoje pola, odpowiadające kolumnom w tabeli w bazie danych, a także metody do wykonywania operacji CRUD (tworzenie, odczyt, aktualizacja, usunięcie) na rekordach.
 
 // W celu zaimplementowania funkcjonalności, którą opisałeś, potrzebujesz połączyć te dwie klasy i dodać dodatkową funkcjonalność. Zasadniczo, będziesz musiał wykonać następujące kroki:

@@ -6,6 +6,7 @@ import { ValidationError } from "../utils/errors";
 import { CreateDriverReq, ListDriverRes, SetLoadForDriverReq } from "../types";
 import { DriverEntity } from "../types";
 import { authToken } from "../utils/authToken";
+import { assignDriverToLoads } from "../utils/assignDriverToLoad";
 
 export const driverRouter = Router();
 
@@ -35,13 +36,26 @@ driverRouter
   })
 
   .post("/", async (req, res) => {
-    const newDriver = new DriverRecord(req.body as CreateDriverReq);
+    //sprawdz czy  id/ref już istnieje i czy jest poprawne:
+    //sprawdz czemu pzrechodzi validację
+    try {
+      const newDriver = new DriverRecord(req.body as CreateDriverReq);
 
-    await newDriver.insert();
-    res.json(newDriver);
+      assignDriverToLoads(newDriver);
+
+      await newDriver.insert();
+
+      res.json({
+        driverRouter: "ok, driver assigned to load",
+        newDriver,
+      });
+    } catch (e) {
+      res.status(406).json({ message: "Wrong reference number" });
+      throw new ValidationError("Wrong reference number");
+    }
   })
 
-  .patch("/load/:driverId", async (req, res) => {
+  .patch("/driver/:driverId", async (req, res) => {
     const { body }: { body: SetLoadForDriverReq } = req;
 
     console.log(body);
@@ -61,7 +75,7 @@ driverRouter
       }
     }
 
-    driver.referenceNumber = load.referenceNumber ?? null;
+    // driver.referenceNumber = load?.referenceNumber ?? null;
     await driver.update();
     res.json(driver);
 
