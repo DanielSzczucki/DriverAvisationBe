@@ -3,6 +3,7 @@ import { ValidationError } from "../utils/errors";
 import { DriverEntity } from "../types";
 import { v4 as uuid } from "uuid";
 import { FieldPacket } from "mysql2";
+import { LoadRecord } from "./load.record";
 
 type DriverRecordResults = [DriverEntity[], FieldPacket[]];
 
@@ -46,8 +47,9 @@ export class DriverRecord implements DriverEntity {
     if (!this.id) {
       this.id = uuid();
     }
+
     await pool.execute(
-      "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading)",
+      "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`, `loadId`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading, :loadId)",
       this
     );
     return this.id;
@@ -80,14 +82,20 @@ export class DriverRecord implements DriverEntity {
     );
   }
 
-  // (`referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`, `loadId`) VALUES ( :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading, :loadId )
+  async assignDriverToLoad(this: DriverRecord): Promise<DriverRecord> {
+    const loadsList = await LoadRecord.listAll();
 
-  //weź loadId,  where loadRef = driverLoadRef
-  // ustaw drier.load id jako loadId
+    const foundLoad = loadsList.find(
+      (load) => load.referenceNumber === this.referenceNumber
+    );
 
-  // async assingLoadToDriver():Promise<DriverRecord>{
-
-  // }
+    if (!foundLoad) {
+      throw new ValidationError("Wrong reference number");
+    } else {
+      this.loadId = foundLoad.id;
+      return this;
+    }
+  }
 
   async delete(): Promise<void> {
     await pool.execute("DELETE FROM `drivers_list` WHERE `id` = :id", {
@@ -96,4 +104,4 @@ export class DriverRecord implements DriverEntity {
   }
 }
 
-//@TODO dodaj: - datę rekordu, oraz przypisanie rekordu do kierowcy//
+//@TODO dodaj: - datę rekordu.
