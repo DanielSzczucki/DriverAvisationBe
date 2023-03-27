@@ -1,7 +1,5 @@
 import { Router } from "express";
 import { hash, compare } from "bcrypt";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import jwt, { Jwt, JwtPayload, VerifyErrors } from "jsonwebtoken";
 import { config } from "../utils/config";
 import { UserRecord } from "../record/user.record";

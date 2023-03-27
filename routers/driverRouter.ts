@@ -36,6 +36,7 @@ driverRouter
 
       const assignedDriver = await newDriver.assignDriverToLoad();
       await assignedDriver.insert();
+      await LoadRecord.assignLoadToDriver(assignedDriver.loadId);
 
       res.json({
         driverRouter: "ok, driver assigned to load",

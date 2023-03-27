@@ -88,18 +88,16 @@ export class DriverRecord implements DriverEntity {
     const foundLoad = loadsList.find(
       (load) => load.referenceNumber === this.referenceNumber
     );
+    console.log("Driver object", this);
 
-    await foundLoad.update();
+    // await foundLoad.update();
 
     if (!foundLoad) {
       throw new ValidationError("Wrong reference number");
     } else {
       this.loadId = foundLoad.id;
-      foundLoad.driverId = this.id;
-      // console.log("Load", foundLoad);
-      // console.log("DriverId", this.id);
       //overloaded solution
-      await foundLoad.assignLoadToDriver();
+      // await foundLoad.assignLoadToDriver();
       return this;
     }
   }

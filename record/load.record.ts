@@ -113,16 +113,17 @@ export class LoadRecord implements LoadEntity {
     );
   }
 
-  async assignLoadToDriver(this: LoadRecord): Promise<LoadRecord> {
+  static async assignLoadToDriver(loadId: string): Promise<LoadRecord> {
+    const load = await LoadRecord.getOne(loadId);
     const driverList = await DriverRecord.listAll();
 
     const foundDriver = driverList.find(
-      (driver) => driver.referenceNumber === this.referenceNumber
+      (driver) => driver.referenceNumber === load.referenceNumber
     );
 
-    this.driverId = foundDriver.id;
-    this.update();
-    return this;
+    load.driverId = foundDriver.id;
+    load.update();
+    return load;
   }
 
   async delete(): Promise<void> {
