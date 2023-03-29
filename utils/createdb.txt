@@ -14,6 +14,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+-- Zrzut struktury bazy danych driver_avisation
+CREATE DATABASE IF NOT EXISTS `driver_avisation` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+USE `driver_avisation`;
+
 -- Zrzut struktury tabela driver_avisation.drivers_list
 CREATE TABLE IF NOT EXISTS `drivers_list` (
   `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
@@ -47,11 +52,10 @@ CREATE TABLE IF NOT EXISTS `loads_list` (
   `quantity` int(11) NOT NULL,
   `weight` int(7) NOT NULL,
   `driverId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `startDate` datetime NOT NULL DEFAULT curdate(),
-  `endDate` datetime DEFAULT curdate(),
+  `startDate` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `endDate` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `driverId` (`driverId`),
-  CONSTRAINT `FK_loads_list_drivers_list` FOREIGN KEY (`driverId`) REFERENCES `drivers_list` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `driverId` (`driverId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Eksport danych został odznaczony.

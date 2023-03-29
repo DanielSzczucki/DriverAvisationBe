@@ -1,8 +1,4 @@
 export const config = {
-  id: "user identyficator",
-  username: "username",
-  email: "test@test.com",
-  password: "password",
   JWT_SECRET: "secret",
   REFRESH_SECRET: "refreshsecret",
   keys: "other",

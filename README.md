@@ -1,21 +1,95 @@
 Web Application
 Backend Api
-App name: Driver Avisation (CargMan App)
+App name: Driver Avisation (SimpleCargo App)
 
-Motywacja.
-Szukałem pomysłu na aplikację/projekt do portfolio, która była by skorelowana z moimi doświadczeniami, projekt który pozwoli mi dalej uczyć się programowania.
-Jestem związany z transportem towarów, dlatego chciałem zrobić prostą aplikacje do zarządzania kierowcami którzy przyjechali na załadunek/rozładunek.
-Spotykam się z tym że, w wielu firmach nie ma systemu powiadomień dla kierowców, co wymaga od kierowcy ciągłego sprawdzania, dowiadywania się.
-Generuje to problemy dla obu stron: ciągłe przerywanie pracy magazyniera, rozpraszanie, denerwowanie, dla kierowcy: przerywanie opoczynku, niepewność,
-konieczność wychodzenia na np. niebezpieczny teren lub podczas złych warunków pogodowych.
-Aplikacja ma rozwiązać te problemy by, zapewnić komfort pracy obu stronom, oraz poprawic jej efektywność.
-dodałem równie modół w którym zarządzamy listą ładunków.
-Głowna funkcjonalność: aplikacja w równych odstępach czasu sprawdza czy pojawił się kierowca po dany towar.
-Towar z kierowcą łączy nr referencyjny.
+Opis
+"DriverAvisationBe" jest serwerową aplikacją napisaną w języku TypeScript z użyciem frameworka Express.js oraz bazy danych NoSQL. Aplikacja służy do zarządzania informacjami o kierowcach i przypisywania kierowców do ładunków.
 
-Możesz skorzystać z aplikacji pod ardesem: //podaj adres
+Wymagania
+Aplikacja wymaga zainstalowania Node.js w wersji 16 lub nowszej oraz bazy danych NoSQL.
+
+Instalacja i uruchomienie
+Sklonuj repozytorium
+Zainstaluj wymagane zależności przy pomocy polecenia npm install
+Edytuj plik utills/config - konfiguracja połączenia z bazą danych, oraz cors i adresy:
+
+export const config = {
+JWT_SECRET: "secret",
+REFRESH_SECRET: "refreshsecret",
+dbHost: "localhost" - adres hosta bazy danych,
+dbUser: "user" - użytkownik bazy danych,
+dbDatabase: "db_name" - nazwa bazy danych,
+dbPassword: "password" - hasło do bazy danych,
+corsOrigin: "http://localhost:3000" - adres dopuszczony do wykonywania zapytań do API,
+};
+
+Utwórz bazę danych w NoSQL:
+
+- skopiuj i uruchomw bazie danych kod z pliku createdb.txt
+
+Uruchom serwer przy pomocy polecenia npm run start
+
+Testy:
+Aplikacja ma podstawowe testy jednoskowe dla driverRecord
+npm run test
+
+Endpointy API
+Aplikacja udostępnia następujące endpointy API:
+
+GET /driver - zwraca listę wszystkich kierowców
+GET /driver/:id - zwraca informacje o kierowcy o podanym identyfikatorze
+POST /driver - dodaje nowego kierowcę
+PUT /driver/:id - aktualizuje informacje o kierowcy o podanym identyfikatorze
+DELETE /driver/:id - usuwa kierowcę o podanym identyfikatorze
+GET /load - zwraca listę wszystkich ładunków
+GET /load/:id - zwraca informacje o ładunku o podanym identyfikatorze
+POST /load - dodaje nowy ładunek
+PUT /load/:id - aktualizuje informacje o ładunku o podanym identyfikatorze
+DELETE /load/:id - usuwa ładunek o podanym identyfikatorze
+
+Opis endpointów API
+
+GET /driver
+Endpoint zwraca listę wszystkich kierowców w formacie JSON. Przykładowa odpowiedź:
+
+GET /driver/:id
+Endpoint zwraca informacje o kierowcy o podanym identyfikatorze w formacie JSON. Przykładowa odpowiedź:
+
+POST /driver
+Endpoint dodaje nowego kierowcę na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+
+PUT /driver/:id
+Endpoint aktualizuje informacje o kierowcy o podanym identyfikatorze na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+
+DELETE /driver/:id
+Endpoint usuwa kierowcę o podanym identyfikatorze.
+
+GET /load
+Endpoint zwraca listę wszystkich ładunków w formacie JSON. Przykładowa odpowiedź:
+
+GET /load/:id
+Endpoint zwraca informacje o ładunku o podanym identyfikatorze w formacie JSON. Przykładowa odpowiedź:
+
+POST /load
+Endpoint dodaje nowy ładunek na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+
+PUT /load/:id
+Endpoint aktualizuje informacje o ładunku o podanym identyfikatorze na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+
+DELETE /load/:id
+Endpoint usuwa ładunek o podanym identyfikatorze.
+
+Możesz skorzystać z aplikacji pod ardesem: simplecargo.networkmanager.pl
 login: user@user.com
 password: user11
+
+Proponowane user story:
+
+1. Pierwsza strona to formularz do dodawania kierowcy.
+2. Kliknij w kluczyk, możesz sie zalogować danymi powyżej, lub zarejestrować swojego użytkownika - administartora, następnie zalogowac się tymi danymi.
+3. Button Loads > add > dodaj ładunek, zapamietan nr ref, to po nim aplikacja dopasowuje kierowcę.
+4. Button Drivers > add > dodaj kierowcę z zapamiętanym nr. referencyjnym
+5. Aplikacja ..
 
 Instalacja/uruchomienie na twoim IDE:
 
@@ -47,11 +121,6 @@ Przeczytaj readme!
 Opis backend:
 Opis frontend znajdziesz w readme tu: https://github.com/DanielSzczucki/DriverAvisationFe
 
-Technologie wykorzystane do budowy aplikacji: Node.js, Express.js, TypeScript, MySQL, RestAPI, DRY, Acrive Record, Hash Functions.
-
-Baza danych: mariaDB z zapytaniami SQL.
-W bazie danych są trzy tabele: kierowców, ładunków i adminów/użytkowników.
-
 Rejestrując użytkownika, w bazie danych nie zapisujemy jego hasła, a hash stworzony przez modół bcrypt, wraz z 10 x sól.
 Podczas logowania, funkcja skrótu weryfikuje hasło logowania.
 Możesz dodać swojego użytkownika admina.
@@ -76,29 +145,3 @@ Folder Utills - zawiera narzędzia oraz pliki konfiguracyjne.
 Routery zawierają w sobie częśc logiki do zarządzania kierowcami, towarami i userami.
 DriverRouter - zwraca listy kierowców
 LoadRouter - zwraca listy ładunków
-
-Opis z punktu widzenia użytownika.
-Po wejściu na strone palikacji zobaczysz formularz do rejestracji kierowcy.
-Kierowca rejestruje się, podając podstawowe dane porzebne w logistyce i transporcie.
-Dane kierowcy zapisywane są w tabelibazy danych: drivers_list
-
-W górnej części aplikacji, w nagłowku, po lewej stronie znajdziesz ikone kluczyk, ikona pozwoli Ci się zalogować.
-Nad formularzem rejestracji użytkowników jeszczę pracuję
-
-Dokumentacja
-[Link do dokumentacji]
-
-Licencja
-[Typ licencji i ewentualne ograniczenia]
-
-Autorzy
-[Listę autorów i wkład w projekt]
-
-A backend side pf project to manage drivers and loads.
-Technologies: TypeScript, MySQL, RestAPI, DRY, Acrive Record.
-There are driver and cargo paths.
-On the main path, the driver registers his data, the driver writes to the database.
-On the cargo path, you can add, edit, delete cargo.
-Own crud in the database.
-
-To add, link loads to drivers, login and authorization: driver and program operator.
