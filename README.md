@@ -1,147 +1,320 @@
-Web Application
-Backend Api
-App name: Driver Avisation (SimpleCargo App)
+## **Web Application - SimpleCargo App**
 
-Opis
-"DriverAvisationBe" jest serwerową aplikacją napisaną w języku TypeScript z użyciem frameworka Express.js oraz bazy danych NoSQL. Aplikacja służy do zarządzania informacjami o kierowcach i przypisywania kierowców do ładunków.
+**Backend Api** "SimpleCargo App" is a server-side application written in TypeScript using the Express.js framework and NoSQL database. The application is used to manage information about drivers and assign drivers to loads.
 
-Wymagania
-Aplikacja wymaga zainstalowania Node.js w wersji 16 lub nowszej oraz bazy danych NoSQL.
+**Requirements** The application requires Node.js version 16 or newer and a NoSQL database.
 
-Instalacja i uruchomienie
-Sklonuj repozytorium
-Zainstaluj wymagane zależności przy pomocy polecenia npm install
-Edytuj plik utills/config - konfiguracja połączenia z bazą danych, oraz cors i adresy:
+**You can use the application at the address: _simplecargo.networkmanager.pl_**
 
+```TypeScript
+{
+"email": "user@user.com"
+"password": "user11"
+};
+```
+
+**Proposed User Story:**
+
+1.  The first page is a form for adding a driver - add your driver and remember the reference number.
+2.  Click on the key, you can log in with the above data, or register your user - administrator, then log in with the created data.
+3.  Button Loads > add > add load, remember the reference number, which the application uses to match the driver.
+4.  The application has matched the driver to the load and the load to the driver.
+5.  In the `Drivers` tab, you will see a list of drivers, and using the `+Add` button, you can add a driver.
+6.  Clicking on the driver's name will take you to their detailed information.
+7.  The same applies to the `Loads` tab.
+
+## **Installation and Execution**
+
+- Clone the repository.
+- Install required dependencies using the command `npm install`.
+- Edit the utills/config file - configure the database connection, as well as cors and addresses:
+
+```TypeScript
 export const config = {
 JWT_SECRET: "secret",
 REFRESH_SECRET: "refreshsecret",
-dbHost: "localhost" - adres hosta bazy danych,
-dbUser: "user" - użytkownik bazy danych,
-dbDatabase: "db_name" - nazwa bazy danych,
-dbPassword: "password" - hasło do bazy danych,
-corsOrigin: "http://localhost:3000" - adres dopuszczony do wykonywania zapytań do API,
+dbHost: "localhost", //database host address,
+dbUser: "user", //database user,
+dbDatabase: "db_name", //database name,
+dbPassword: "password", //database password,
+corsOrigin: "http://localhost:3000", //address allowed to make API requests,
 };
+```
 
-Utwórz bazę danych w NoSQL:
+- Create a NoSQL database:
+  - copy and run the code from the createdb.txt file in the database.
+- Run the server using the command `npm run start`.
 
-- skopiuj i uruchomw bazie danych kod z pliku createdb.txt
+**Tests:** The application has basic unit tests for driverRecord. `npm run test`
 
-Uruchom serwer przy pomocy polecenia npm run start
+## Security
 
-Testy:
-Aplikacja ma podstawowe testy jednoskowe dla driverRecord
-npm run test
+**Registration and login:**
 
-Endpointy API
-Aplikacja udostępnia następujące endpointy API:
+- When registering a user, we do not save their password in the database. Instead, we use a hash created by the `bcrypt` module, along with a salt generated 10 times.
+- During login, the hash function verifies the login password.
+- During login, a **JWT** is created and sent with an `httpOnly cookie`.
+- `api/refresh` - refreshes the **JWT** token.
 
-GET /driver - zwraca listę wszystkich kierowców
-GET /driver/:id - zwraca informacje o kierowcy o podanym identyfikatorze
-POST /driver - dodaje nowego kierowcę
-PUT /driver/:id - aktualizuje informacje o kierowcy o podanym identyfikatorze
-DELETE /driver/:id - usuwa kierowcę o podanym identyfikatorze
-GET /load - zwraca listę wszystkich ładunków
-GET /load/:id - zwraca informacje o ładunku o podanym identyfikatorze
-POST /load - dodaje nowy ładunek
-PUT /load/:id - aktualizuje informacje o ładunku o podanym identyfikatorze
-DELETE /load/:id - usuwa ładunek o podanym identyfikatorze
+**Authentication middleware**
 
-Opis endpointów API
+- The middleware verifies the user on every request and checks their **JWT** token on every path except `PUSH /api/driver`.
 
-GET /driver
-Endpoint zwraca listę wszystkich kierowców w formacie JSON. Przykładowa odpowiedź:
+**CORS:**
 
-GET /driver/:id
-Endpoint zwraca informacje o kierowcy o podanym identyfikatorze w formacie JSON. Przykładowa odpowiedź:
+- In the `utils/config` file, you need to set the address that will accept CORS.
 
-POST /driver
-Endpoint dodaje nowego kierowcę na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+## API Endpoints
 
-PUT /driver/:id
-Endpoint aktualizuje informacje o kierowcy o podanym identyfikatorze na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+The application provides the following API endpoints:
+**GET api/** - returns a greeting.
+**POST api/register** - registers a user/application operator.
+**POST api/login** - logs in a user/application operator.
+**POST api/logout** - logs out a user.
+**POST api/refresh** - refreshes a user's session.
 
-DELETE /driver/:id
-Endpoint usuwa kierowcę o podanym identyfikatorze.
+**GET api/driver/:id** - returns information about the driver with the specified identifier.
 
-GET /load
-Endpoint zwraca listę wszystkich ładunków w formacie JSON. Przykładowa odpowiedź:
+**POST api/driver** - adds a new driver.
 
-GET /load/:id
-Endpoint zwraca informacje o ładunku o podanym identyfikatorze w formacie JSON. Przykładowa odpowiedź:
+**PATCH api/driver/:id** - updates information about the driver with the specified identifier.
 
-POST /load
-Endpoint dodaje nowy ładunek na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+**DELETE api/driver/:id** - deletes the driver with the specified identifier.
 
-PUT /load/:id
-Endpoint aktualizuje informacje o ładunku o podanym identyfikatorze na podstawie przekazanych w ciele żądania danych w formacie JSON. Przykładowe żądanie:
+**GET api/load** - returns a list of all loads.
 
-DELETE /load/:id
-Endpoint usuwa ładunek o podanym identyfikatorze.
+**GET api/load/:id** - returns information about the load with the specified identifier.
 
-Możesz skorzystać z aplikacji pod ardesem: simplecargo.networkmanager.pl
-login: user@user.com
-password: user11
+**POST api/load** - adds a new load.
 
-Proponowane user story:
+**PATCH api/load/:id** - updates information about the load with the specified identifier.
 
-1. Pierwsza strona to formularz do dodawania kierowcy.
-2. Kliknij w kluczyk, możesz sie zalogować danymi powyżej, lub zarejestrować swojego użytkownika - administartora, następnie zalogowac się tymi danymi.
-3. Button Loads > add > dodaj ładunek, zapamietan nr ref, to po nim aplikacja dopasowuje kierowcę.
-4. Button Drivers > add > dodaj kierowcę z zapamiętanym nr. referencyjnym
-5. Aplikacja ..
+**DELETE api/load/:id** - deletes the load with the specified identifier.
 
-Instalacja/uruchomienie na twoim IDE:
+**_API Endpoints Description:_**
+**`GET api/`** This endpoint returns a greeting message in JSON format:
 
-Wszytskie branche są potrzebne, masz do dyspozycji:
-Master: głowny, aktualny branch z którego aplikacja jest wstawiana na serwer.
-Main: aktualny branch, który umożliwia uruchomienie na komputerze, zaraz po skopiowaniu brancha z serwisu github.
-Dev: branch nad kórym pracuję, ale jeszce nie jest wstawiony na serwer.
-Funkcjonalność: funkcjonalności nad którymi pracuję, lub skończyłem pracę.
-Do dyspozycji masz cąłą historię branchy.
+```TypeScript
+{
+	"greet": "hello! test"
+}
+```
 
-Sklonuj repozytorium: git clone https://github.com/DanielSzczucki/DriverAvisationBe/tree/main.git
-Wejdź do folderu z aplikacją: cd DriverAvisationBe
-Zainstaluj zależności: npm install
+**`POST api/register`** This endpoint is used for user registration, and accepts data in JSON format:
 
-//Konfiguracja
-//[Instrukcja konfiguracji aplikacji]
+```TypeScript
+{
+	"name":"string",
+	"email": "string",
+	"password": "string" //minimum 5 characters
+}
+```
 
-Uruchomienie
-Uruchom serwer: npm start
-Aplikacja będzie dostępna pod adresem http://localhost:3001
+**`POST api/login`** This endpoint is used for user login, and accepts data in JSON format:
 
-uruchomienie bazy danych lokalnie:
-w php my admin wyłącz sprawdzanie kluczy obcych
-kod z pliku createdb wklejasz do heidi lub phpMyAdmin.
+```TypeScript
+{
+	"email": "string",
+	"password": "string" //minimum 5 characters
+}
+```
 
-Tu jest FrontEnd: https://github.com/DanielSzczucki/DriverAvisationFe
-Przeczytaj readme!
+**`POST api/logout`** This endpoint is used for user logout, clears authentication data from cookies, and returns JSON:
 
-Opis backend:
-Opis frontend znajdziesz w readme tu: https://github.com/DanielSzczucki/DriverAvisationFe
+TypeScriptCopy code
 
-Rejestrując użytkownika, w bazie danych nie zapisujemy jego hasła, a hash stworzony przez modół bcrypt, wraz z 10 x sól.
-Podczas logowania, funkcja skrótu weryfikuje hasło logowania.
-Możesz dodać swojego użytkownika admina.
-Wszytsko odbywa się na ścieżce homeRouter:
+```TypeScript
+{
+	message:  "logged out",
+}
+```
 
-- zarządzanie nowymi użytkownikami adminami,
-- tworzenie jwt,
-- odświerzanie jwt,
-- hashowanie.
+**`POST api/refresh`** This endpoint is used for refreshing JWT. It verifies `req.body.refreshToken` sent in the body (front-end authentication: react-auth-kit), sends back `accesToken`, or a JSON message:
 
-Aplikacja posiada system autentykacji i logowania.
-Autentykacja odbywa się za pomocą JWT tworzonego na backendzie, wysyłanego w HttpOnly cookie.
-Jwt tworzy token i refresh token - na ten moment, tymczasowo uprosciłem to rozwiązanie, jest to związane z częścią frontend, gdzie również potrzbny jest refresh token.
-Teraz refreshToken i Token - to jeden, ten sam token.
-A token - to token używany do weryfikacji na backendzie.
-Aplikacja posiada middleware do sparwdzania tokena, zabezpieczone są prawie wszystkie ścieżki, oprócz dodawania kierowcy.
+```TypeScript
+{
+	message:  "Unauthorized",
+}
+// or
+{
+	{ accestToken }
+}
+```
 
-Folder record: znajdziesz tam klasy, prosty crud napisany od podstaw według wzorca Active Record (nie zawiera on wszytskich metod, np do ustalania relacji pomiędzy tabelami), służące do zarządzania rekordami w poszczególnych tabelach.
+**`GET api/driver`** This endpoint returns a list of all drivers in JSON format. Sample response:
 
-Folder Utills - zawiera narzędzia oraz pliki konfiguracyjne.
+```TypeScript
+{
+	"driverRouter": "ok",
+	"driverList": [
+		{
+			"id": "uuid",
+			"referenceNumber": "string",
+			"name": "string",
+			"lastName": "string",
+			"phoneNumber": number,
+			"truckNumber": "string",
+			"trailerNumber": "string",
+			"companyName": number,
+			"loadingUnloading": "string",
+			"loadId": "uuid || NOT SIGN"
+		},
+		{
+			"id": "uuid",
+			"referenceNumber": "string",
+			"name": "string",
+			"lastName": "string",
+			"phoneNumber": number,
+			"truckNumber": "string",
+			"trailerNumber": "string",
+			"companyName": number,
+			"loadingUnloading": "string",
+			"loadId": "uuid || NOT SIGN"
+		}
+		]
+}
+```
 
-Routery zawierają w sobie częśc logiki do zarządzania kierowcami, towarami i userami.
-DriverRouter - zwraca listy kierowców
-LoadRouter - zwraca listy ładunków
+**`GET api/driver/:id`** This endpoint returns information about the driver with the specified identifier in JSON format.
+
+```TypeScript
+{
+	"id": "uuid",
+	"referenceNumber": "string",
+	"name": "string",
+	"lastName": "string",
+	"phoneNumber": number,
+	"truckNumber": "string",
+	"trailerNumber": "string",
+	"companyName": number,
+	"loadingUnloading": "string",
+	"loadId": "uuid || NOT SIGN"
+}
+```
+
+**`POST api/driver`** This endpoint adds a new driver based on the data provided in the request body in JSON format.
+
+```TypeScript
+{
+	"id": "" //automatically set uuid when not provided,
+	"referenceNumber": "string" //required,
+	"name": "string",
+	"lastName": "string",
+	"phoneNumber": number,
+	"truckNumber": "string",
+	"trailerNumber": "string",
+	"companyName": number,
+	"loadingUnloading": "string",
+	"loadId": "uuid || NOT SIGN" //automatically assigned,
+}
+```
+
+**`PATCH api/driver/:id`** This endpoint updates the information about the driver with the given identifier based on the data passed in the JSON format request body:
+
+```TypeScript
+{
+    "referenceNumber": "string",
+    "name": "string",
+    "lastName": "string",
+    "phoneNumber": number,
+    "truckNumber": "string",
+    "trailerNumber": "string",
+    "companyName": number,
+    "loadingUnloading": "string",
+    "loadId": "uuid || NOT SIGN"
+}
+```
+
+**`GET api/load`** This endpoint returns a list of all loads in JSON format. Example response:
+
+```TypeScript
+{
+    "loadRouter": "ok",
+    "loadList": [
+        {
+            "id":  "uuid",
+            "referenceNumber":  "string",
+            "loadName":  "string ",
+            "sender":  "string",
+            "forwarder":  "string",
+            "recipient": "string",
+            "units": "string",
+            "quantity": number,
+            "weight": number,
+            "driverId":  "uuid || NOT SIGN",
+            "startDate":  "string DD/MM",
+            "endDate":  "NOT SIGN"
+        },
+        {
+            "id":  "uuid",
+            "referenceNumber":  "string",
+            "loadName":  "string ",
+            "sender":  "string",
+            "forwarder":  "string",
+            "recipient": "string",
+            "units": "string",
+            "quantity": number,
+            "weight": number,
+            "driverId":  "uuid || NOT SIGN",
+            "startDate":  "string DD/MM",
+            "endDate":  "NOT SIGN"
+        }
+    ]
+}
+```
+
+**`GET api/load/:id`** This endpoint returns information about the load with the given identifier in JSON format:
+
+```TypeScript
+{
+    "id": "uuid",
+    "referenceNumber": "string",
+    "loadName": "string ",
+    "sender": "string",
+    "forwarder": "string",
+    "recipient": "string",
+    "units": "string",
+    "quantity": number,
+    "weight": number,
+    "driverId": "uuid || NOT SIGN",
+    "startDate": "string DD/MM",
+    "endDate": "NOT SIGN"
+}
+```
+
+`POST api/load` This endpoint adds a new load based on the data passed in the JSON format request body:
+
+```TypeScript
+{
+    "id": "", // automatically assigned if not provided
+    "referenceNumber": "string", // required
+    "loadName": "string ",
+    "sender": "string",
+    "forwarder": "string",
+    "recipient": "string",
+    "units": "string",
+    "quantity": number, // required
+    "weight": number, // required
+    "driverId": "uuid || NOT SIGN",
+    "startDate": "string DD/MM", // automatically assigned
+    "endDate": "NOT SIGN" // automatically assigned
+}
+```
+
+**`PATCH api/load/:id`** This endpoint updates the information about the load with the given identifier based on the data passed in the JSON format request body:
+
+```TypeScript
+{
+    "referenceNumber": "string", // required
+    "loadName": "string ",
+    "sender": "string",
+    "forwarder": "string",
+    "recipient": "string",
+    "units": "string",
+    "quantity": number, // required
+    "weight": number, // required
+    "driverId": "uuid || NOT SIGN",
+    "startDate": "string DD/MM", // automatically assigned
+    "
+   }
+```
