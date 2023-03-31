@@ -11,18 +11,15 @@
 //w tym rekordzie daj moliwośc wysłania smsa do kierowcy
 // jeśli nie to sprawdz kolejny ładunek,
 //jelsi nie ma to nie rób nic
-//przei
 //
 
-// Aby przeszukać tabele z ładunkami i kierowcami w celu znalezienia par, które mają ten sam numer referencyjny, możesz użyć zapytania łączącego (join). Możesz użyć INNER JOIN, aby znaleźć tylko ładunki i kierowców, którzy mają takie same numery referencyjne. Oto przykładowe zapytanie:
-
+// Aby przeszukać tabele z ładunkami i kierowcami w celu znalezienia par, które mają ten sam numer referencyjny,:  INNER JOIN, aby znaleźć tylko ładunki i kierowców, którzy mają takie same numery referencyjne.
 // vbnet
 // Copy code
 // SELECT l.id as loadId, d.id as driverId FROM loads l
 // INNER JOIN drivers d ON l.referenceNumber = d.referenceNumber
-// W powyższym zapytaniu użyłem aliasów dla kolumn id z tabel loads i drivers, ponieważ oba zwrócone id mają takie same nazwy, a aliasy pozwalają na ich rozróżnienie. W wyniku zapytania otrzymasz tabelę z dwiema kolumnami: loadId i driverId, w której każdy wiersz reprezentuje jedno powiązanie między ładunkiem a kierowcą.
 
-// Możesz użyć biblioteki mysql2, którą już importujesz w swoich plikach, aby wykonać to zapytanie i zwrócić wynik. Oto przykładowy kod, który wykonuje zapytanie i dodaje kierowcę do ładunku, jeśli ładunek i kierowca mają ten sam numer referencyjny:
+// lin mysql2,
 
 // typescript
 // Copy code
@@ -43,16 +40,10 @@
 //   }
 // }
 
+//overloaded - zmienić w razie czego metode w klasie userRecord
 // export { assignDriversToLoads };
-// W tym kodzie używamy metody execute z pulą połączeń, aby wykonać zapytanie. Następnie iterujemy po wyniku i dla każdego znalezionego wiersza pobieramy ładunek i przypisujemy mu id kierowcy. Na koniec wywołujemy metodę update ładunku, aby zaktualizować go w bazie danych z nowym id kierowcy.
 
-// dszczucki@gmail.com
-// czy możesz mi to lepiej wyjaśnić?
-// Oczywiście, chętnie pomogę!
-
-// W Twoim kodzie jest już zdefiniowana klasa DriverRecord i klasa LoadRecord, które odzwierciedlają encje w Twojej bazie danych. Każda z klas ma swoje pola, odpowiadające kolumnom w tabeli w bazie danych, a także metody do wykonywania operacji CRUD (tworzenie, odczyt, aktualizacja, usunięcie) na rekordach.
-
-// W celu zaimplementowania funkcjonalności, którą opisałeś, potrzebujesz połączyć te dwie klasy i dodać dodatkową funkcjonalność. Zasadniczo, będziesz musiał wykonać następujące kroki:
+// W celu zaimplementowania funkcjonalności, potrzebujesz połączyć te dwie klasy i dodać dodatkową funkcjonalność. Zasadniczo, będziesz musiał wykonać następujące kroki:
 
 // Pobierz listę wszystkich ładunków z tabeli loads i listę wszystkich kierowców z tabeli drivers.
 // Iteruj przez listę ładunków i sprawdź, czy którykolwiek z kierowców ma ten sam numer referencyjny co ładunek.
@@ -83,20 +74,13 @@
 //     }
 //   }
 // }
-// Mam nadzieję, że to pomaga. Daj mi znać, jeśli masz jakieś dodatkowe pytania lub potrzebujesz dalszej pomocy!
 
-// napisz mi zapytanie w sql
-
-// Oczywiście, napiszę dla Ciebie przykładowe zapytanie w SQL.
-
-// Przykładowo, zapytanie, które zwróci wszystkich użytkowników z tabeli "uzytkownicy", którzy mieszkają w kraju o nazwie "Polska" i mają więcej niż 18 lat, mogłoby wyglądać tak:
+// zapytanie, które zwróci wszystkich użytkowników z tabeli "uzytkownicy", którzy mieszkają w kraju o nazwie "Polska" i mają więcej niż 18 lat, mogłoby wyglądać tak:
 
 // SQL
 // Copy code
 // SELECT * FROM uzytkownicy WHERE kraj='Polska' AND wiek > 18;
 // Zapytanie to wybiera wszystkie kolumny z tabeli "uzytkownicy" dla wierszy, gdzie wartość kolumny "kraj" jest równa "Polska" oraz wartość kolumny "wiek" jest większa niż 18.
-
-// Regenerate response
 
 //poprawne zapytanie
 // SELECT loads_list.referenceNumber, loads_list.id AS loadId, drivers_list.id AS driverId

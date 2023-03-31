@@ -41,12 +41,12 @@ driverRouter
     res.json(newDriver);
   })
 
-  .patch("/load/:driverId", async (req, res) => {
+  .patch("/driver/:id", async (req, res) => {
     const { body }: { body: SetLoadForDriverReq } = req;
 
     console.log(body);
 
-    const driver = await DriverRecord.getOne(req.params.driverId);
+    const driver = await DriverRecord.getOne(req.params.id);
 
     if (driver === null) {
       throw new ValidationError(`Can't find driver with this id:${driver.id} `);
@@ -64,10 +64,29 @@ driverRouter
     driver.referenceNumber = load.referenceNumber ?? null;
     await driver.update();
     res.json(driver);
+  })
 
-    // @TODO add loadId to driver.record.ts
-    //add verification driver load id = load it ?? null
-    // add driver update
-    //send json with driver
-    /////////////////usuń dane z tabeli i dodaj klucze
+  .delete("/:id", async (req, res) => {
+    console.log("REQPARAMS", req.params);
+
+    const driver = await DriverRecord.getOne(req.params.id);
+
+    //a driver can only be added when load ref no matches
+
+    if (!driver) {
+      res.status(404).json({
+        message: "No such driver",
+      });
+      throw new ValidationError("No such driver");
+    }
+
+    await driver.delete();
+    res.status(202).json({
+      message: `Driver ${req.params.id} was succesfully deleted`,
+    });
   });
+
+// @TODO
+//add verification driver load id = load it ?? null
+// add driver update
+/////////////////usuń dane z tabeli i dodaj klucze

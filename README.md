@@ -121,8 +121,6 @@ The application provides the following API endpoints:
 
 **`POST api/logout`** This endpoint is used for user logout, clears authentication data from cookies, and returns JSON:
 
-TypeScriptCopy code
-
 ```TypeScript
 {
 	message:  "logged out",
