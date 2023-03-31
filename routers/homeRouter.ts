@@ -9,6 +9,7 @@ import {
   DataStoredInToken,
   TokenData,
 } from "../types/user/user";
+import { log } from "console";
 
 export const homeRouter = Router();
 
@@ -130,6 +131,7 @@ homeRouter
                 expiresIn: "5m",
               }
             );
+
             return res.json({ accestToken });
           }
         }

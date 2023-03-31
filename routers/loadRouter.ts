@@ -9,14 +9,12 @@ export const loadRouter = Router();
 loadRouter
   .get("/", async (req, res) => {
     const loadList = await LoadRecord.listAll();
-    const driverList = await DriverRecord.listAll();
 
     console.log(loadList);
 
     res.json({
       loadRouter: "ok",
       loadList,
-      driverList,
     });
   })
 
@@ -34,18 +32,25 @@ loadRouter
   })
 
   .delete("/:id", async (req, res) => {
+    console.log(req.params.id);
+
     const load = await LoadRecord.getOne(req.params.id);
 
     if (!load) {
       throw new ValidationError("No such load");
     }
 
-    if ((await load.countGivenLoads()) > 0) {
-      throw new ValidationError("Canot remove given load");
+    if (!load) {
+      res.status(404).json({
+        message: "No such load",
+      });
+      throw new ValidationError("No such load");
     }
 
     await load.delete();
-    res.end();
+    res.status(202).json({
+      message: `Load ${req.params.id} was succesfully deleted`,
+    });
   })
 
   .post("/", async (req, res) => {
