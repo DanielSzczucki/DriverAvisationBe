@@ -3,6 +3,7 @@ import { ValidationError } from "../utils/errors";
 import { v4 as uuid } from "uuid";
 import { LoadEntity, Units } from "../types";
 import { FieldPacket } from "mysql2";
+import { DriverRecord } from "./driver.record";
 
 type LoadRecordResults = [LoadRecord[], FieldPacket[]];
 
@@ -62,22 +63,8 @@ export class LoadRecord implements LoadEntity {
     if (!this.startDate) {
       this.startDate = new Date().toLocaleDateString();
     }
-    if (!this.startDate) {
+    if (!this.endDate) {
       this.endDate = new Date().toLocaleDateString();
-    }
-
-    switch (true) {
-      case !this.id:
-        this.id = uuid();
-        break;
-      case !this.startDate:
-        this.startDate = new Date().toDateString();
-        break;
-      case !this.endDate:
-        this.endDate = "NOT SIGN";
-      case !this.driverId:
-        this.driverId = "NOT SIGN";
-        break;
     }
 
     await pool.execute(
@@ -114,6 +101,29 @@ export class LoadRecord implements LoadEntity {
     )) as LoadRecordResults;
 
     return count;
+  }
+
+  async update(): Promise<void> {
+    await pool.execute(
+      "UPDATE `loads_list` SET `driverId` = :driverId WHERE `id`= :id",
+      {
+        driverId: this.driverId,
+        id: this.id,
+      }
+    );
+  }
+
+  static async assignLoadToDriver(loadId: string): Promise<LoadRecord> {
+    const load = await LoadRecord.getOne(loadId);
+    const driverList = await DriverRecord.listAll();
+
+    const foundDriver = driverList.find(
+      (driver) => driver.referenceNumber === load.referenceNumber
+    );
+
+    load.driverId = foundDriver.id;
+    load.update();
+    return load;
   }
 
   async delete(): Promise<void> {

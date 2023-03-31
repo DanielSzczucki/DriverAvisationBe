@@ -11,6 +11,8 @@ loadRouter
     const loadList = await LoadRecord.listAll();
     const driverList = await DriverRecord.listAll();
 
+    console.log(loadList);
+
     res.json({
       loadRouter: "ok",
       loadList,

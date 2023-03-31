@@ -3,6 +3,7 @@ import { ValidationError } from "../utils/errors";
 import { DriverEntity } from "../types";
 import { v4 as uuid } from "uuid";
 import { FieldPacket } from "mysql2";
+import { LoadRecord } from "./load.record";
 
 type DriverRecordResults = [DriverEntity[], FieldPacket[]];
 
@@ -46,8 +47,9 @@ export class DriverRecord implements DriverEntity {
     if (!this.id) {
       this.id = uuid();
     }
+
     await pool.execute(
-      "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading)",
+      "INSERT INTO `drivers_list`(`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`, `loadId`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading, :loadId)",
       this
     );
     return this.id;
@@ -72,14 +74,33 @@ export class DriverRecord implements DriverEntity {
 
   async update(): Promise<void> {
     await pool.execute(
-      "UPDATE `drivers_list` SET (`id`, `referenceNumber`, `name`, `lastName`, `phoneNumber`, `truckNumber`, `trailerNumber`, `companyName`, `loadingUnloading`, `loadId`) VALUES (:id, :referenceNumber, :name, :lastName, :phoneNumber, :truckNumber, :trailerNumber, :companyName, :loadingUnloading, :loadId )",
-      this
+      "UPDATE `drivers_list` SET `loadId` = :loadId WHERE `id`= :id",
+      {
+        loadId: this.loadId,
+        id: this.id,
+      }
     );
   }
 
-  // async assingLoadToDriver():Promise<DriverRecord>{
+  async assignDriverToLoad(this: DriverRecord): Promise<DriverRecord> {
+    const loadsList = await LoadRecord.listAll();
 
-  // }
+    const foundLoad = loadsList.find(
+      (load) => load.referenceNumber === this.referenceNumber
+    );
+    console.log("Driver object", this);
+
+    // await foundLoad.update();
+
+    if (!foundLoad) {
+      throw new ValidationError("Wrong reference number");
+    } else {
+      this.loadId = foundLoad.id;
+      //overloaded solution
+      // await foundLoad.assignLoadToDriver();
+      return this;
+    }
+  }
 
   async delete(): Promise<void> {
     await pool.execute("DELETE FROM `drivers_list` WHERE `id` = :id", {
@@ -88,4 +109,4 @@ export class DriverRecord implements DriverEntity {
   }
 }
 
-//@TODO dodaj: - datę rekordu, oraz przypisanie rekordu do kierowcy//
+//@TODO dodaj: - datę rekordu.

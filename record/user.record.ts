@@ -70,7 +70,7 @@ export class UserRecord {
 
   async update(): Promise<void> {
     await pool.execute(
-      "UPDATE `user_list` SET `name` = :name, `referenceNumber` = :referenceNumber WHERE `id` = :id",
+      "UPDATE `user_list` SET `name` = :name, `email` = :email WHERE `id` = :id",
       {
         name: this.name,
         email: this.email,

@@ -3,8 +3,7 @@ import { DriverRecord } from "../record/driver.record";
 import { LoadRecord } from "../record/load.record";
 
 import { ValidationError } from "../utils/errors";
-import { CreateDriverReq, ListDriverRes, SetLoadForDriverReq } from "../types";
-import { DriverEntity } from "../types";
+import { CreateDriverReq, SetLoadForDriverReq } from "../types";
 import { authToken } from "../utils/authToken";
 
 export const driverRouter = Router();
@@ -15,8 +14,6 @@ driverRouter
     const driverList = await DriverRecord.listAll();
     const loadList = await LoadRecord.listAll();
 
-    // console.log(loadList);
-
     res.json({
       driverRouter: "ok",
       driverList,
@@ -26,7 +23,6 @@ driverRouter
 
   .get("/:id", authToken, async (req, res) => {
     const driver = await DriverRecord.getOne(req.params.id);
-    // const load = await LoadRecord.getOne(req.params.loadId);
 
     res.json({
       singleDriver: "ok",
@@ -35,10 +31,20 @@ driverRouter
   })
 
   .post("/", async (req, res) => {
-    const newDriver = new DriverRecord(req.body as CreateDriverReq);
+    try {
+      const newDriver = new DriverRecord(req.body as CreateDriverReq);
 
-    await newDriver.insert();
-    res.json(newDriver);
+      const assignedDriver = await newDriver.assignDriverToLoad();
+      await assignedDriver.insert();
+      await LoadRecord.assignLoadToDriver(assignedDriver.loadId);
+
+      res.json({
+        driverRouter: "ok, driver assigned to load",
+        assignedDriver,
+      });
+    } catch (e) {
+      res.status(406).json({ message: "Wrong reference number" });
+    }
   })
 
   .patch("/driver/:id", async (req, res) => {
@@ -61,7 +67,7 @@ driverRouter
       }
     }
 
-    driver.referenceNumber = load.referenceNumber ?? null;
+    // driver.referenceNumber = load?.referenceNumber ?? null;
     await driver.update();
     res.json(driver);
   })
@@ -86,7 +92,6 @@ driverRouter
     });
   });
 
-// @TODO
-//add verification driver load id = load it ?? null
+// @TODO add loadId to driver.record.ts
 // add driver update
-/////////////////usuń dane z tabeli i dodaj klucze
+//send json with driver
