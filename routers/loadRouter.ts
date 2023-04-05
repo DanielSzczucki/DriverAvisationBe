@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { LoadRecord } from "../record/load.record";
 import { DriverRecord } from "../record/driver.record";
-import { CreateLoadReq, GetSingleLoadRes } from "../types";
+import { CreateLoadReq, GetSingleLoadRes, LoadEntity } from "../types";
 import { ValidationError } from "../utils/errors";
 
 export const loadRouter = Router();
@@ -58,4 +58,42 @@ loadRouter
     await newLoad.insert();
 
     res.json(newLoad);
+  })
+
+  .put("/:id", async (req, res) => {
+    const { body }: { body: LoadEntity } = req;
+    const load = await LoadRecord.getOne(req.params.id);
+    console.log(load);
+    const drivers = await DriverRecord.listAll();
+
+    //check is load exist with new reference number?
+    const driverFoundWithNewRef = drivers.find(
+      (driver) => driver.referenceNumber === body.referenceNumber
+    );
+
+    if (!driverFoundWithNewRef) {
+      res.status(404).json({
+        message: `Driver with ref ${body.referenceNumber} and this id ${body.id} not found`,
+      });
+      throw new ValidationError(`Driver with id ${body.driverId} not found`);
+    }
+
+    if (!load) {
+      res.status(404).json({
+        message: `Load with id ${req.params.id} not found`,
+      });
+      throw new ValidationError(
+        `Can't find load with this id:${req.params.id} `
+      );
+    }
+    //changed driverId for new driver Id matched with load ref
+    body.driverId = driverFoundWithNewRef.id;
+
+    Object.assign(load, body);
+
+    await load.update();
+    res.json({
+      message: `Driver ${load.id} data updated`,
+      load,
+    });
   });
