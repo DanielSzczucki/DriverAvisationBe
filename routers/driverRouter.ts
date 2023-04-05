@@ -3,7 +3,7 @@ import { DriverRecord } from "../record/driver.record";
 import { LoadRecord } from "../record/load.record";
 
 import { ValidationError } from "../utils/errors";
-import { CreateDriverReq, SetLoadForDriverReq } from "../types";
+import { CreateDriverReq, DriverEntity, SetLoadForDriverReq } from "../types";
 import { authToken } from "../utils/authToken";
 
 export const driverRouter = Router();
@@ -12,12 +12,10 @@ driverRouter
 
   .get("/", authToken, async (req, res) => {
     const driverList = await DriverRecord.listAll();
-    const loadList = await LoadRecord.listAll();
 
     res.json({
       driverRouter: "ok",
       driverList,
-      loadList,
     });
   })
 
@@ -33,13 +31,12 @@ driverRouter
   .post("/", async (req, res) => {
     try {
       const newDriver = new DriverRecord(req.body as CreateDriverReq);
-
       const assignedDriver = await newDriver.assignDriverToLoad();
       await assignedDriver.insert();
       await LoadRecord.assignLoadToDriver(assignedDriver.loadId);
 
       res.json({
-        driverRouter: "ok, driver assigned to load",
+        driverRouter: "Ok, driver assigned to load",
         assignedDriver,
       });
     } catch (e) {
@@ -47,42 +44,53 @@ driverRouter
     }
   })
 
-  .patch("/driver/:id", async (req, res) => {
-    const { body }: { body: SetLoadForDriverReq } = req;
-
-    console.log(body);
-
+  .put("/:id", async (req, res) => {
+    const { body }: { body: DriverEntity } = req;
     const driver = await DriverRecord.getOne(req.params.id);
+    console.log(driver);
+    const loads = await LoadRecord.listAll();
 
-    if (driver === null) {
-      throw new ValidationError(`Can't find driver with this id:${driver.id} `);
+    //check is load exist with new reference number?
+    const loadFoundWithNewRef = loads.find(
+      (load) => load.referenceNumber === body.referenceNumber
+    );
+
+    if (!loadFoundWithNewRef) {
+      res.status(404).json({
+        message: `Load with ref ${body.referenceNumber} and this id ${body.loadId} not found`,
+      });
+      throw new ValidationError(`Load with id ${body.loadId} not found`);
     }
 
-    const load =
-      body.loadId === "" ? null : await LoadRecord.getOne(body.loadId);
-
-    if (load) {
-      if (load.quantity <= (await load.countGivenLoads())) {
-        throw new ValidationError("There is not enough of this product");
-      }
+    if (!driver) {
+      res.status(404).json({
+        message: `Driver with id ${req.params.id} not found`,
+      });
+      throw new ValidationError(
+        `Can't find driver with this id:${req.params.id} `
+      );
     }
+    //changed loadId for new load Id matched with load ref
+    body.loadId = loadFoundWithNewRef.id;
 
-    // driver.referenceNumber = load?.referenceNumber ?? null;
+    Object.assign(driver, body);
+
     await driver.update();
-    res.json(driver);
+    res.json({
+      message: `Driver ${driver.id} data updated`,
+      driver,
+    });
   })
 
   .delete("/:id", async (req, res) => {
-    console.log("REQPARAMS", req.params);
-
     const driver = await DriverRecord.getOne(req.params.id);
 
     //a driver can only be added when load ref no matches
 
     if (!driver) {
-      res.status(404).json({
-        message: "No such driver",
-      });
+      res
+        .status(404)
+        .json({ message: `Driver with id ${req.params.id} not found` });
       throw new ValidationError("No such driver");
     }
 

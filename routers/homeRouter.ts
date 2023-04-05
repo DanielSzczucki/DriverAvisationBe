@@ -128,7 +128,7 @@ homeRouter
               },
               config.JWT_SECRET,
               {
-                expiresIn: "5m",
+                expiresIn: "30m",
               }
             );
 
