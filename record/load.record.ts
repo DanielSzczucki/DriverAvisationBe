@@ -105,11 +105,8 @@ export class LoadRecord implements LoadEntity {
 
   async update(): Promise<void> {
     await pool.execute(
-      "UPDATE `loads_list` SET `driverId` = :driverId WHERE `id`= :id",
-      {
-        driverId: this.driverId,
-        id: this.id,
-      }
+      "UPDATE `loads_list` SET `referenceNumber` = :referenceNumber, `loadName` = :loadName, `sender` = :sender, `forwarder` = :forwarder,`recipient` = :recipient, `units` = :units,`quantity` = :quantity, `weight` = :weight,`endDate` = :endDate WHERE `id` = :id",
+      this
     );
   }
 

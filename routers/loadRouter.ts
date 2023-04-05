@@ -93,7 +93,7 @@ loadRouter
 
     await load.update();
     res.json({
-      message: `Driver ${load.id} data updated`,
+      message: `Load ${load.id} data updated`,
       load,
     });
   });
