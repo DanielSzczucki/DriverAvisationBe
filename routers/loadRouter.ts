@@ -63,7 +63,6 @@ loadRouter
   .put("/:id", async (req, res) => {
     const { body }: { body: LoadEntity } = req;
     const load = await LoadRecord.getOne(req.params.id);
-    console.log(load);
     const drivers = await DriverRecord.listAll();
 
     //check is load exist with new reference number?

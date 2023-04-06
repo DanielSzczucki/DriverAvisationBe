@@ -10,6 +10,7 @@ export const config = {
   dbUser: "root",
   dbDatabase: "driver_avisation",
   dbPassword: "",
+  smsApiToken: "7vnZIqbAKQXLhqx3kPeoamBzACxv83j1aRZbfnDv",
   corsOrigin: "http://localhost:3000",
   // dbUser: "simplema_cargo",
   // dbDatabase: "simplema_cargo",
