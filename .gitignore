@@ -6,7 +6,6 @@
 
 .env
 node_modules
-config.ts
 dist
 utils/config.ts
 db
