@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { DriverRecord } from "../record/driver.record";
 import { LoadRecord } from "../record/load.record";
-
 import { ValidationError } from "../utils/errors";
 import { CreateDriverReq, DriverEntity, SetLoadForDriverReq } from "../types";
 import { authToken } from "../utils/authToken";
+import { smsApiController } from "../utils/smsApiController";
 
 export const driverRouter = Router();
 
@@ -41,6 +41,31 @@ driverRouter
       });
     } catch (e) {
       res.status(406).json({ message: "Wrong reference number" });
+    }
+  })
+
+  .post("/sms/:id", async (req, res) => {
+    try {
+      const driver = await DriverRecord.getOne(req.params.id);
+
+      const messageForDriver = req.body.message;
+
+      const driverPhoneNumber = driver.phoneNumber
+        .toString()
+        .replace(/^00/, "+");
+
+      const smsApiResponse = smsApiController(
+        driverPhoneNumber,
+        messageForDriver
+      );
+
+      const smsApiStatus = await smsApiResponse;
+
+      res.json({
+        message: `Message was send to Driver: ${driver.name} ${driver.phoneNumber} with Ref: ${driver.referenceNumber}`,
+      });
+    } catch (e) {
+      res.json({ message: `Something went Wrong` });
     }
   })
 
