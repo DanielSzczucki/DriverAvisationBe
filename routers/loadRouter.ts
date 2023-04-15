@@ -63,20 +63,8 @@ loadRouter
   .put("/:id", async (req, res) => {
     const { body }: { body: LoadEntity } = req;
     const load = await LoadRecord.getOne(req.params.id);
-    const drivers = await DriverRecord.listAll();
 
-    //check is load exist with new reference number?
-    const driverFoundWithNewRef = drivers.find(
-      (driver) => driver.referenceNumber === body.referenceNumber
-    );
-
-    if (!driverFoundWithNewRef) {
-      res.status(404).json({
-        message: `Driver with ref ${body.referenceNumber} and this id ${body.id} not found`,
-      });
-      throw new ValidationError(`Driver with id ${body.driverId} not found`);
-    }
-
+    //is load exist?
     if (!load) {
       res.status(404).json({
         message: `Load with id ${req.params.id} not found`,
@@ -85,14 +73,32 @@ loadRouter
         `Can't find load with this id:${req.params.id} `
       );
     }
+
+    //delete load from first driver
+    if (load.driverId) {
+      const firstDriver = await DriverRecord.getOne(load.driverId);
+      firstDriver.loadId = null;
+      console.log("Driver with load assign", firstDriver);
+      await firstDriver.update();
+    }
+
+    //update second (new assign) driver with new load
+    if (body.driverId) {
+      const secondDriver = await DriverRecord.getOne(body.driverId);
+      secondDriver.loadId = body.id;
+      console.log("Driver with load assign", secondDriver);
+
+      await secondDriver.update();
+    }
+
     //changed driverId for new driver Id matched with load ref
-    body.driverId = driverFoundWithNewRef.id;
+    // body.driverId = driverFoundWithNewRef.id;
 
     Object.assign(load, body);
-
     await load.update();
+
     res.json({
-      message: `Load ${load.id} data updated`,
+      message: `Load ${load.loadName} with ID: ${load.id} data updated`,
       load,
     });
   });
