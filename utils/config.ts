@@ -14,6 +14,6 @@ export const config = {
   corsOrigin: "http://localhost:3000",
   // dbUser: "simplema_cargo",
   // dbDatabase: "simplema_cargo",
-  // dbPassword: "YyJWwTbbr",
+  // dbPassword: "uIhkeJe9k6",
   // corsOrigin: "https://simplecargo.networkmanager.pl",
 };
